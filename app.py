@@ -1,12 +1,21 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from http import client
 from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 import requests
 from bs4 import BeautifulSoup
 
+# Load environment variables from .env
+load_dotenv()
 
-client = MongoClient('mongodb+srv://ricolaa02:fg6swfzg7m@cluster0.cysbprr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client.dbfilm
+# Membaca nilai variabel lingkungan
+MONGODB_URI = os.getenv("MONGODB_URI")
+DB_NAME = os.getenv("DB_NAME")
+
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
 
 app = Flask(__name__)
 
@@ -20,7 +29,7 @@ def movie_post():
     star_receive = request.form['star_give']
     comment_receive = request.form['comment_give']
 
-    headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    headers = {'User-Agent' : 'Mozillgia/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
     data = requests.get(url_receive, headers=headers)
 
     soup = BeautifulSoup(data.text, 'html.parser')
